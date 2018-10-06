@@ -13,7 +13,14 @@ from sqlalchemy import create_engine, inspect
 from flask import Flask, jsonify, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
+from flask_cors import CORS, cross_origin
+
+
+
+
 app = Flask(__name__, static_url_path='/static')
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 #################################################
 # Database Setup
