@@ -14,3 +14,4 @@ SQLAlchemy==1.2.10
 Werkzeug==0.14.1
 gunicorn>=19.7.1
 plotly>=2.0.9
+Flask-Cors==3.0.2
