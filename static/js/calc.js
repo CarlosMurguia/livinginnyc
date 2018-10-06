@@ -14,5 +14,5 @@ function getIncomeAfterTax(income) {
     if (income === undefined || income === null) {
         return 0;
     }
-    return income * ((100 - TAX_RATE_PERCENTAGE) / 100);
+    return income * ((100 - TAX_RATE_PERCENTAGE )/20);
 }
