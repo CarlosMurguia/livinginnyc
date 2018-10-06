@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>
+        Dashboard
+    </title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no'
+          name='viewport'/>
+    <!--     Fonts and icons     -->
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/material-dashboard.css') }}" type="text/css">
+
+    <!-- Map CSS Sheet -->
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/overwrite.css') }}" type="text/css">
+
+    <!-- Leaflet JS & CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
+          integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+            integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+            crossorigin=""></script>
+
+    <!-- d3 JavaScript -->
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+</head>
+
+<body class="dark-edition">
+<div class="wrapper ">
+
+
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-12 col-lg-12">
+                    <div class="card card-chart">
+                        <div class="card-header card-header-success">
+                                
+                                <div id="map"></div>
+                            <!-- <div>
+
+                                <iframe src="http://127.0.0.1:5000/map" height="450px" width="100%"></iframe>
+                            </div> -->
+
+                        </div>
+                        
+                        <div class="card-body">
+                            <h4 class="card-title">Map of Average Rent in NYC</h4>
+                            <p class="card-category">
+                                <span class="text-success"><i class="fa fa-long-arrow-up"></i> GREEN </span> you can affort it.</p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-12">
+                    <div class="card card-chart">
+                        <div class="card-header card-header-warning">
+                            <div class="ct-chart" id="bar" style="height: 160px;"></div>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">{{ profession }}</h4>
+                            <p class="card-category">
+                                The graph shows income by experience
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-12">
+                        <div class="card card-chart">
+                            <div class="card-header card-header-danger">
+                                <div class="ct-chart" id="lineGraph" style="height: 160px;"></div>
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title">Average Monthly Rent</h4>
+                                <p class="card-category">This graph display average rent for New York</p>
+                            </div>
+    
+                        </div>
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-warning card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">group</i>
+                            </div>
+                            <p class="card-category">Employed</p>
+                            <h3 class="card-title">
+                                <small><div id="numEmployed"></div></small>
+                            </h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-info card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">edit</i>
+                            </div>
+                            <p class="card-category">Occupational Code</p>
+                            <h3 class="card-title">
+                                <small><div id="SOCCode"></div></small>
+                            </h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-danger card-header-icon">
+                            <div class="card-icon">
+                                <i class="material-icons">home</i>
+                            </div>
+                            <p class="card-category">Affordable Rent</p>
+                            <h3 class="card-title">
+                                <small><div id="affordableRent"></div></small>
+                            </h3>
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                            <div class="card-header card-header-success card-header-icon">
+                                    <div class="card-icon">
+                                        <i class="material-icons">insert_chart</i>
+                                    </div>
+                                    <p class="card-category">Income After Tax (24%)</p>
+                                    <h3 class="card-title">
+                                        <small><div id="incomeAfterTax"></div></small>
+                                    </h3>
+                                </div>
+                        <div class="card-footer">
+                            <div class="stats">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+
+
+                    <div class="card">
+                        <div class="card-header card-header-tabs card-header-warning">
+                            <div class="nav-tabs-navigation">
+                                <div class="nav-tabs-wrapper">
+                                    <span class="nav-tabs-title">Advices:</span>
+                                    <ul class="nav nav-tabs" data-tabs="tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" href="#profile" data-toggle="tab">
+                                                <i class="material-icons">store</i> Before Move
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#messages" data-toggle="tab">
+                                                <i class="material-icons">code</i> When you move
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#settings" data-toggle="tab">
+                                                <i class="material-icons">cloud</i> Other
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="profile">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               checked>
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Advices to everyone</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Remember always try to get some money to safe deposit</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Check always the transportation possibilities
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               checked>
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Try to find a roommate</td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="messages">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               checked>
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Get a lot of boxes for your stuff
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Contract the movers with time</td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="settings">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value="">
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Read your condo rules</td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               checked>
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>Find the best way to get to work
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                               checked>
+                                                        <span class="form-check-sign">
+                                    <span class="check"></span>
+                                  </span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>avoid rush hours</td>
+
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="col-lg-6 col-md-12">
+
+                    <div class="card">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title">Affordable Neighborhoods</h4>
+                            <p class="card-category"></p>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover">
+                                <thead class="text-warning">
+                                <th>ID</th>
+                                <th>City</th>
+                                <th>Average Rent</th>
+                                
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>RIDGEFIELD</td>
+                                    <td>$2,000</td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>NORTH BERGEN</td>
+                                    <td>$1,490</td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>FORT LEE</td>
+                                    <td>$1940</td>
+                                </tr>
+                               
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+<!--   Core JS Files   -->
+
+<script>
+    var profession = {{ profession|tojson }};
+    var income = {{ income|tojson }};
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/core/jquery.min.js') }}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/bootstrap-material-design.min.js') }}"></script>
+<script type="text/javascript"
+        src="{{ url_for('static', filename='assets/js/plugins/perfect-scrollbar.jquery.min.js') }}"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
+        integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
+        crossorigin=""></script>
+
+<script type="text/javascript" src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/calc.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/bar.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/line.js') }}"></script>
+
+<!-- additional for bootstrap -->
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/material-dashboard.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/jQuery.MultiFile.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/custom.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugins/bootstrap-notify.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='assets/js/plugins/chartist.min.js') }}"></script>
+
+<script type="text/javascript" src="static/js/config.js"></script>
+<!-- JS  -->
+
+
+<!-- <script type="text/javascript" src="static/js/logic4.js"></script> -->
+<script type="text/javascript" src="static/js/map.js"></script>
+
+<script>
+    $(document).ready(function () {
+        md.initDashboardPageCharts();
+    });
+</script>
+</body>
+
+</html>

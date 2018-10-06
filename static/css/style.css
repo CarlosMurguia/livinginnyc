@@ -1,0 +1,16 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+#map,
+body,
+html {
+  height: 500px !important;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: rgb(35, 35, 35) !important;
+  color: #333 !important;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.4) !important;
+  }
