@@ -47,28 +47,33 @@ rent = Base.classes.rent
 nycrent = Base.classes.nycrent
 
 @app.route("/")
+@cross_origin()
 def index():
     return render_template("index.html")
 
 
 @app.route("/map")
+@cross_origin()
 def map():
     return render_template("map.html")
 
 
 @app.route("/dashboard")
+@cross_origin()
 def dashboard_page():
     profession = request.args.get('profession')
     income = request.args.get('income')
     return render_template("dashboard.html", profession=profession, income=income)
 
 @app.route("/bar")
+@cross_origin()
 def bar_page():
     profession = request.args.get('profession')
     income = request.args.get('income')
     return render_template("bar.html", profession=profession, income=income)
 
 @app.route("/line")
+@cross_origin()
 def line_page():
     profession = request.args.get('profession')
     income = request.args.get('income')
@@ -77,6 +82,7 @@ def line_page():
 # Returns json list of all professions from database
 # Information is returned from title column of wages table
 @app.route("/professions")
+@cross_origin()
 def professions_data():
     # Retrieve median income for profession from database
     stmt = db.session.query(wages).statement
@@ -91,6 +97,7 @@ def professions_data():
 # Returns wages information in json format based on profession
 # If profession is not found empty json object is returned
 @app.route("/wages/<profession>")
+@cross_origin()
 def wages_profession(profession):
     print(profession)
     stmt = db.session.query(wages).statement
@@ -117,6 +124,7 @@ def wages_profession(profession):
 
 
 @app.route("/neighborhoods")
+@cross_origin()
 def neighborhoods_data():
     stmt = db.session.query(rent).statement
     df = pd.read_sql_query(stmt, db.session.bind)
@@ -135,6 +143,7 @@ def neighborhoods_data():
 
 
 @app.route("/neighborhoods/<name>")
+@cross_origin()
 def hood_data(name):
     """Return mean rent for a neighborhood"""
     sel = [
@@ -172,6 +181,7 @@ def hood_data(name):
 
 
 @app.route("/linedata")
+@cross_origin()
 def line_data():
 
     # testing this out
@@ -214,6 +224,7 @@ def line_data():
 
 
 @app.route("/barchart")
+@cross_origin()
 def bar_chart():
     profession = request.args.get('profession')
 
@@ -250,10 +261,12 @@ while True:
 
 
 @app.route("/readcsv")
+@cross_origin()
 def read_csv():
     return page
 
 @app.after_request 
+@cross_origin()
 def after_request(response):
     header = response.headers
     header['Access-Control-Allow-Origin'] = '*'
